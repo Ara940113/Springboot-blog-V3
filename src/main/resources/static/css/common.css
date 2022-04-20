@@ -1,8 +1,8 @@
-.my_atag_none{
+.my_atag_none {
     text-decoration-line: none;
-    color: black;
+    color:black;
 }
-.my_atag_none:hover{
+.my_atag_none:hover {
     text-decoration-line: none;
 }
 
@@ -28,7 +28,8 @@
 }
 
 .my_dropdown_menu {
-    position: absolute !important; }
+    position: absolute !important; 
+}
 
 .my_navbar_title {
     color: rgb(25, 25, 25);
@@ -107,7 +108,7 @@
     padding: 20px;
     border-radius: 10px;
     border: none;
-    background-color:rgb(255, 85, 68);
+    background-color: rgb(255, 85, 68);
     color: white;
     margin: 5px 0;
 }
@@ -117,7 +118,7 @@
     text-overflow: ellipsis;
 }
 
-@media (max-width: 420px) { 
+@media (max-width : 420px) { 
     .my_post_list_item {
         display: block !important;
     }
@@ -132,4 +133,3 @@
         font-weight: 600 !important;
     }
 }
-

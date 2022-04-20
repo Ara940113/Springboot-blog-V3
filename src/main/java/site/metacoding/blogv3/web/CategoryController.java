@@ -23,27 +23,36 @@ import site.metacoding.blogv3.web.dto.category.CategoryWriteReqDto;
 @Controller
 public class CategoryController {
 
-    private final HttpSession session;
-    private final CategoryService categoryService;
+        private final HttpSession session;
+        private final CategoryService categoryService;
 
-    @GetMapping("/s/category/writeForm")
-    public String writeForm() {
-        return "category/writeForm";
-    }
+        @GetMapping("/s/category/writeForm")
+        public String writeForm() {
 
-    @PostMapping("/s/category")
-    public @ResponseBody String write(@Valid CategoryWriteReqDto categoryWriteReqDto, BindingResult bindingResult,
-            @AuthenticationPrincipal LoginUser loginUser) {
+                return "/category/writeForm";
+        }
 
-        UtilValid.요청에러처리(bindingResult);
+        @PostMapping("/s/category")
+        public @ResponseBody String write(
+                        @Valid CategoryWriteReqDto categoryWriteReqDto,
+                        BindingResult bindingResult,
+                        @AuthenticationPrincipal LoginUser loginUser) {
 
-        // User principal = (User) session.getAttribute("principal");
-        User principal = loginUser.getUser();
+                UtilValid.요청에러처리(bindingResult);
 
-        Category category = categoryWriteReqDto.toEntity(principal);
-        // 서비스에 기능 호출 (Category 모델)
-        categoryService.카테고리등록(category);
+                // User principal = (User) session.getAttribute("principal");
+                User principal = loginUser.getUser();
 
-        return Script.href("/s/category/writeForm", "카테고리 등록 완료");
-    }
+                // LoginUser loginU = (LoginUser)
+                // SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                // User principal = loginU.getUser();
+
+                Category category = categoryWriteReqDto.toEntity(principal);
+
+                // 서비스에 기능 호출 (Category 모델)
+                categoryService.카테고리등록(category);
+
+                return Script.href("/s/category/writeForm", "카테고리 등록 완료");
+        }
+
 }

@@ -25,10 +25,13 @@ public class PostController {
 
     private final PostService postService;
 
+    // CategoryService 사용하지 말고
+    // PostService 사용하세요. 이유는 나중에 category, post글 다 같이 가지고 가야 하기 때문임!!
+
     @PostMapping("/s/post")
     public String write(PostWriteReqDto postWriteReqDto, @AuthenticationPrincipal LoginUser loginUser) {
 
-        postService.게시글쓰기(postWriteReqDto);
+        postService.게시글쓰기(postWriteReqDto, loginUser.getUser());
 
         return "redirect:/user/" + loginUser.getUser().getId() + "/post";
     }
@@ -41,6 +44,7 @@ public class PostController {
         if (categorys.size() == 0) {
             throw new CustomException("카테고리 등록이 필요해요");
         }
+
         model.addAttribute("categorys", categorys);
         return "/post/writeForm";
     }
@@ -49,7 +53,9 @@ public class PostController {
     public String postList(@PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser, Model model) {
 
         // SELECT * FROM category WHERE userId = :id
+
         // 카테고리 가져가기 (category, post 글 다 같이 가져가야 하기 때문에 PostService 사용할 것)
+
         PostRespDto postRespDto = postService.게시글목록보기(id);
         model.addAttribute("postRespDto", postRespDto);
         return "/post/list";

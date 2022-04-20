@@ -22,4 +22,5 @@ public class GlobalExceptionHandler {
 
         return Script.back(e.getMessage());
     }
+
 }

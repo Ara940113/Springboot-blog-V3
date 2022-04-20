@@ -13,9 +13,8 @@
         <div class="form-group">
             <select class="form-control" name="categoryId">
                 {{#categorys}}
-                <option value="{{id]}">{{title}}</option>
+                <option value="{{id}}">{{title}}</option>
                 {{/categorys}}
-
             </select>
         </div>
         <input type="text" placeholder="Enter Title" name="title" class="form-control">
@@ -76,9 +75,11 @@
     <br />
 
 </div>
+
+
 <script>
     function getQuill() {
-        let quillContent = $("#editor-container .ql-editor").val();
+        let quillContent = $("#editor-container .ql-editor").html();
         $("#content").html(quillContent);
         return true;
     }

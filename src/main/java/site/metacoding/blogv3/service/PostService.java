@@ -43,7 +43,10 @@ public class PostService {
     public void 게시글쓰기(PostWriteReqDto postWriteReqDto, User principal) {
 
         // 1. UUID로 파일쓰고 경로 리턴 받기
-        String thumnail = UtilFileUpload.write(uploadFolder, postWriteReqDto.getThumnailFile());
+        String thumnail = null;
+        if (!postWriteReqDto.getThumnailFile().isEmpty()) {
+            thumnail = UtilFileUpload.write(uploadFolder, postWriteReqDto.getThumnailFile());
+        }
 
         // 2. 카테고리 있는지 확인
         Optional<Category> categoryOp = categoryRepository.findById(postWriteReqDto.getCategoryId());

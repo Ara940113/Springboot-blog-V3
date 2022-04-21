@@ -14,8 +14,12 @@
         {{#postRespDto.posts}}
         <div class="my_post_list_item">
             <div class="my_post_list_item_left">
-                <!-- <div class="my_fakeimg">Fake Image</div>-->
+                {{#thumnail}}
                 <img src="/upload/{{thumnail}} " width="100%" height="100%">
+                {{/thumnail}}
+                {{^thumnail}}
+                <div class="my_fakeimg">Fake Image</div>
+                {{/thumnail}}
             </div>
             <div class="my_post_list_item_right my_ellipsis">
                 <div class="my_text_title my_ellipsis">{{title}}

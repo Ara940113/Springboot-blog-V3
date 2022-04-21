@@ -2,6 +2,9 @@ package site.metacoding.blogv3.web;
 
 import java.util.List;
 
+import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,7 +54,7 @@ public class PostController {
 
     @GetMapping("/user/{id}/post")
     public String postList(Integer categoryId, @PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser,
-            Model model) {
+            Model model, @PageableDefault(size = 3) Pageable Pageable) {
 
         // SELECT * FROM category WHERE userId = :id
 
@@ -59,9 +62,9 @@ public class PostController {
         PostRespDto postRespDto = null;
 
         if (categoryId == null) {
-            postRespDto = postService.게시글목록보기(id);
+            postRespDto = postService.게시글목록보기(id, Pageable);
         } else {
-            postRespDto = postService.게시글카테고리별보기(id, categoryId);
+            postRespDto = postService.게시글카테고리별보기(id, categoryId, Pageable);
         }
 
         model.addAttribute("postRespDto", postRespDto);

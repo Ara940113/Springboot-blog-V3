@@ -1,13 +1,12 @@
 package site.metacoding.blogv3.service;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +18,6 @@ import site.metacoding.blogv3.domain.post.PostRepository;
 import site.metacoding.blogv3.domain.user.User;
 import site.metacoding.blogv3.handler.ex.CustomException;
 import site.metacoding.blogv3.util.UtilFileUpload;
-
 import site.metacoding.blogv3.web.dto.post.PostRespDto;
 import site.metacoding.blogv3.web.dto.post.PostWriteReqDto;
 
@@ -61,8 +59,8 @@ public class PostService {
 
     }
 
-    public PostRespDto 게시글목록보기(Integer userId) {
-        List<Post> postsEntity = postRepository.findByUserId(userId);
+    public PostRespDto 게시글목록보기(Integer userId, Pageable Pageable) { // Pageable은 domain으로 import
+        Page<Post> postsEntity = postRepository.findByUserId(userId, Pageable);
         List<Category> categorysEntity = categoryRepository.findByUserId(userId);
 
         PostRespDto postRespDto = new PostRespDto(
@@ -71,8 +69,8 @@ public class PostService {
         return postRespDto;
     }
 
-    public PostRespDto 게시글카테고리별보기(Integer userId, Integer categoryId) {
-        List<Post> postsEntity = postRepository.findByUserIdAndCategoryId(userId, categoryId);
+    public PostRespDto 게시글카테고리별보기(Integer userId, Integer categoryId, Pageable Pageable) {
+        Page<Post> postsEntity = postRepository.findByUserIdAndCategoryId(userId, categoryId, Pageable);
         List<Category> categorysEntity = categoryRepository.findByUserId(userId);
 
         PostRespDto postRespDto = new PostRespDto(

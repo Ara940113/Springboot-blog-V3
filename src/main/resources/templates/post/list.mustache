@@ -11,7 +11,7 @@
 
     <div class="my_post_list">
 
-        {{#postRespDto.posts}}
+        {{#postRespDto.posts.content}}
         <div class="my_post_list_item">
             <div class="my_post_list_item_left">
                 {{#thumnail}}
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        {{/postRespDto.posts}}
+        {{/postRespDto.posts.content}}
     </div>
 
 </div>

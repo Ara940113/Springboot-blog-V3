@@ -50,13 +50,20 @@ public class PostController {
     }
 
     @GetMapping("/user/{id}/post")
-    public String postList(@PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser, Model model) {
+    public String postList(Integer categoryId, @PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser,
+            Model model) {
 
         // SELECT * FROM category WHERE userId = :id
 
         // 카테고리 가져가기 (category, post 글 다 같이 가져가야 하기 때문에 PostService 사용할 것)
+        PostRespDto postRespDto = null;
 
-        PostRespDto postRespDto = postService.게시글목록보기(id);
+        if (categoryId == null) {
+            postRespDto = postService.게시글목록보기(id);
+        } else {
+            postRespDto = postService.게시글카테고리별보기(id, categoryId);
+        }
+
         model.addAttribute("postRespDto", postRespDto);
         return "/post/list";
     }

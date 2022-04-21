@@ -61,8 +61,18 @@ public class PostService {
 
     }
 
-    public PostRespDto 게시글목록보기(int userId) {
+    public PostRespDto 게시글목록보기(Integer userId) {
         List<Post> postsEntity = postRepository.findByUserId(userId);
+        List<Category> categorysEntity = categoryRepository.findByUserId(userId);
+
+        PostRespDto postRespDto = new PostRespDto(
+                postsEntity,
+                categorysEntity);
+        return postRespDto;
+    }
+
+    public PostRespDto 게시글카테고리별보기(Integer userId, Integer categoryId) {
+        List<Post> postsEntity = postRepository.findByUserIdAndCategoryId(userId, categoryId);
         List<Category> categorysEntity = categoryRepository.findByUserId(userId);
 
         PostRespDto postRespDto = new PostRespDto(

@@ -31,6 +31,12 @@ public class PostController {
     // CategoryService 사용하지 말고
     // PostService 사용하세요. 이유는 나중에 category, post글 다 같이 가지고 가야 하기 때문임!!
 
+    @GetMapping("/user/{userId}/post/{postId}")
+    public String detail(Model model, @AuthenticationPrincipal LoginUser loginUser) {
+
+        return "/post/detail";
+    }
+
     @PostMapping("/s/post")
     public String write(PostWriteReqDto postWriteReqDto, @AuthenticationPrincipal LoginUser loginUser) {
 
@@ -70,4 +76,24 @@ public class PostController {
         model.addAttribute("postRespDto", postRespDto);
         return "/post/list";
     }
+
+    // 테스트 컨트롤러!
+    @GetMapping("/test/user/{id}/post")
+    public @ResponseBody PostRespDto testPostList(Integer categoryId, @PathVariable Integer id,
+            @AuthenticationPrincipal LoginUser loginUser,
+            Model model,
+            @PageableDefault(size = 3) Pageable pageable) {
+        // SELECT * FROM category WHERE userId = :id
+        // 카테고리 가져가세요!!
+        PostRespDto postRespDto = null;
+
+        if (categoryId == null) {
+            postRespDto = postService.게시글목록보기(id, pageable);
+        } else {
+            postRespDto = postService.게시글카테고리별보기(id, categoryId, pageable);
+        }
+
+        return postRespDto;
+    }
+
 }

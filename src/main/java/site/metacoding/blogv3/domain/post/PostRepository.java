@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface PostRepository extends JpaRepository<Post, Integer> {
+
     // Love 기능 구현되면 쿼리 변경해야함.
     @Query(value = "SELECT * FROM post ORDER BY id DESC LIMIT 0,9", nativeQuery = true)
     List<Post> mFindByPopular();

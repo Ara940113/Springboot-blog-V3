@@ -1,11 +1,11 @@
 package site.metacoding.blogv3.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +43,6 @@ public class PostService {
 
     public List<Category> 게시글쓰기화면(User principal) {
         return categoryRepository.findByUserId(principal.getId());
-
     }
 
     // 하나의 서비스는 여러가지 일을 한번에 처리한다. (여러가지 일이 하나의 트랜잭션이다.)
@@ -69,23 +68,40 @@ public class PostService {
 
     }
 
-    public PostRespDto 게시글목록보기(Integer userId, Pageable Pageable) { // Pageable은 domain으로 import
-        Page<Post> postsEntity = postRepository.findByUserId(userId, Pageable);
+    public PostRespDto 게시글목록보기(Integer userId, Pageable pageable) {
+
+        Page<Post> postsEntity = postRepository.findByUserId(userId, pageable);
         List<Category> categorysEntity = categoryRepository.findByUserId(userId);
 
+        List<Integer> pageNumbers = new ArrayList<>();
+        for (int i = 0; i < postsEntity.getTotalPages(); i++) {
+            pageNumbers.add(i);
+        }
         PostRespDto postRespDto = new PostRespDto(
                 postsEntity,
-                categorysEntity);
+                categorysEntity,
+                userId,
+                postsEntity.getNumber() - 1,
+                postsEntity.getNumber() + 1,
+                pageNumbers);
         return postRespDto;
     }
 
-    public PostRespDto 게시글카테고리별보기(Integer userId, Integer categoryId, Pageable Pageable) {
-        Page<Post> postsEntity = postRepository.findByUserIdAndCategoryId(userId, categoryId, Pageable);
+    public PostRespDto 게시글카테고리별보기(Integer userId, Integer categoryId, Pageable pageable) {
+        Page<Post> postsEntity = postRepository.findByUserIdAndCategoryId(userId, categoryId, pageable);
         List<Category> categorysEntity = categoryRepository.findByUserId(userId);
 
+        List<Integer> pageNumbers = new ArrayList<>();
+        for (int i = 0; i < postsEntity.getTotalPages(); i++) {
+            pageNumbers.add(i);
+        }
         PostRespDto postRespDto = new PostRespDto(
                 postsEntity,
-                categorysEntity);
+                categorysEntity,
+                userId,
+                postsEntity.getNumber() - 1,
+                postsEntity.getNumber() + 1,
+                pageNumbers);
         return postRespDto;
     }
 }

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +30,7 @@ import site.metacoding.blogv3.web.dto.post.PostWriteReqDto;
 @Service
 public class PostService {
 
-    // private static final Logger LOGGER = LogManager.getLogger(PostService.class);
+    // private static final Logger logger = LogManager.getLogger(PostService.class);
 
     @Value("${file.path}")
     private String uploadFolder;
@@ -49,17 +47,17 @@ public class PostService {
         if (postOp.isPresent()) {
             Post postEntity = postOp.get();
 
-            // 방문자 카운터 증가
+            // 방문자 수 증가
             Optional<Visit> visitOp = visitRepository.findById(postEntity.getUser().getId());
             if (visitOp.isPresent()) {
                 Visit visitEntity = visitOp.get();
                 Long totalCount = visitEntity.getTotalCount();
                 visitEntity.setTotalCount(totalCount + 1);
             } else {
-                log.error("미친 심각", "회원가입할때 Visit이 안 만들어지는 심각한 오류가 있습니다.");
+                log.error("미친 심각", "회원가입 할 때 Visit이 안 만들어지는 심각한 오류가 있습니다.");
                 // sms 메시지 전송
                 // email 전송
-                // file 쓰기
+                // file 쓰기 (file에 log 남기기)
                 throw new CustomException("일시적 문제가 생겼습니다. 관리자에게 문의해주세요.");
             }
             return postEntity;
@@ -111,29 +109,31 @@ public class PostService {
                 pageOwnerId,
                 postsEntity.getNumber() - 1,
                 postsEntity.getNumber() + 1,
-                pageNumbers);
+                pageNumbers,
+                0L);
 
-        // 방문자 카운터 증가
+        // 방문자 수 증가
         Optional<User> pageOwnerOp = userRepository.findById(pageOwnerId);
-
         if (pageOwnerOp.isPresent()) {
             User pageOwnerEntity = pageOwnerOp.get();
             Optional<Visit> visitOp = visitRepository.findById(pageOwnerEntity.getId());
             if (visitOp.isPresent()) {
                 Visit visitEntity = visitOp.get();
+                // Dto에 방문자 수 담기 (원래 request에서 ip 주소 받아서 동일하면 증가 안 시키는 로직 필요)
+                postRespDto.setTotalCount(visitEntity.getTotalCount());
+
                 Long totalCount = visitEntity.getTotalCount();
                 visitEntity.setTotalCount(totalCount + 1);
             } else {
-                log.error("미친 심각", "회원가입할때 Visit이 안 만들어지는 심각한 오류가 있습니다.");
+                log.error("미친 심각", "회원가입 할 때 Visit이 안 만들어지는 심각한 오류가 있습니다.");
                 // sms 메시지 전송
                 // email 전송
-                // file 쓰기
+                // file 쓰기 (file에 log 남기기)
                 throw new CustomException("일시적 문제가 생겼습니다. 관리자에게 문의해주세요.");
             }
         } else {
-            throw new CustomException("해당 블로그는 없는 페이지입니다.");
+            throw new CustomException("해당 블로그는 존재하지 않습니다.");
         }
-
         return postRespDto;
     }
 
@@ -151,7 +151,31 @@ public class PostService {
                 pageOwnerId,
                 postsEntity.getNumber() - 1,
                 postsEntity.getNumber() + 1,
-                pageNumbers);
+                pageNumbers,
+                0L);
+
+        // 방문자 수 증가
+        Optional<User> pageOwnerOp = userRepository.findById(pageOwnerId);
+        if (pageOwnerOp.isPresent()) {
+            User pageOwnerEntity = pageOwnerOp.get();
+            Optional<Visit> visitOp = visitRepository.findById(pageOwnerEntity.getId());
+            if (visitOp.isPresent()) {
+                Visit visitEntity = visitOp.get();
+                // Dto에 방문자 수 담기 (원래 request에서 ip 주소 받아서 동일하면 증가 안 시키는 로직 필요)
+                postRespDto.setTotalCount(visitEntity.getTotalCount());
+
+                Long totalCount = visitEntity.getTotalCount();
+                visitEntity.setTotalCount(totalCount + 1);
+            } else {
+                log.error("미친 심각", "회원가입 할 때 Visit이 안 만들어지는 심각한 오류가 있습니다.");
+                // sms 메시지 전송
+                // email 전송
+                // file 쓰기 (file에 log 남기기)
+                throw new CustomException("일시적 문제가 생겼습니다. 관리자에게 문의해주세요.");
+            }
+        } else {
+            throw new CustomException("해당 블로그는 존재하지 않습니다.");
+        }
         return postRespDto;
     }
 }

@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import site.metacoding.blogv3.domain.category.Category;
 import site.metacoding.blogv3.domain.post.Post;
 import site.metacoding.blogv3.domain.user.User;
@@ -24,7 +23,6 @@ public class PostWriteReqDto {
     @Size(min = 1, max = 60)
     @NotBlank
     private String title;
-
     private MultipartFile thumnailFile;
     @NotNull
     private String content; // 컨텐트 null 허용

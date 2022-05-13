@@ -28,7 +28,6 @@ public class CategoryController {
 
         @GetMapping("/s/category/writeForm")
         public String writeForm() {
-
                 return "/category/writeForm";
         }
 
@@ -42,7 +41,6 @@ public class CategoryController {
 
                 // User principal = (User) session.getAttribute("principal");
                 User principal = loginUser.getUser();
-
                 // LoginUser loginU = (LoginUser)
                 // SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 // User principal = loginU.getUser();
@@ -54,5 +52,4 @@ public class CategoryController {
 
                 return Script.href("/s/category/writeForm", "카테고리 등록 완료");
         }
-
 }

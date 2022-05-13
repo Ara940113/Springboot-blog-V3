@@ -18,4 +18,4 @@ let postDelete = async () => {
     } else {
         alert("삭제실패");
     }
-}; 
+};

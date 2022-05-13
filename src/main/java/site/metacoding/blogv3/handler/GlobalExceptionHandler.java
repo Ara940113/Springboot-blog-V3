@@ -19,7 +19,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     public String htmlException(Exception e) { // 일반적인 요청 Get(a태그), Post(form태그) 요청
-
         return Script.back(e.getMessage());
     }
 
